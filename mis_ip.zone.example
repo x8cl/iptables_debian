@@ -1,0 +1,19 @@
+###este es un ejemplo, todo lo comentado con # no será considerado
+##Mis ip
+#casa
+10.10.10.233
+#casa 02
+200.23.56.7
+#trabajo
+10.100.110.100-10.10.110.200
+##Clientes
+#juanito
+192.168.100.0/24
+200.72.1.5/29
+
+
+###tampoco importan los saltos de linea
+
+##VPN
+#vpn01 en 213.32.4.34
+213.32.4.34

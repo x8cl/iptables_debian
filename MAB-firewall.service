@@ -1,0 +1,15 @@
+[Unit]
+Description=IPTables Firewall by MAB
+After=network.target
+##Descomentar la siguiente linea para que inicie antes que el servicio especificado (systemd-analyze critical-chain)
+#Before=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/firewall/firewall-start.sh
+RemainAfterExit=true
+ExecStop=/home/firewall/firewall-stop.sh
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target

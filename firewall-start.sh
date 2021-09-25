@@ -2,7 +2,7 @@
 ###Descargar el archivo desde iblocklist
 echo "Descargando el archivo desde iblocklist..."
 ##Gratis (P2P/gz) Chile
-curl -L 'http://list.iblocklist.com/?list=cl&fileformat=p2p&archiveformat=gz' | gunzip | awk -F ':' '{print $2}' > cl.zone
+curl -L 'http://list.iblocklist.com/?list=cl&fileformat=p2p&archiveformat=gz' | gunzip | awk -F ':' '{print $2}' > /home/firewall/cl.zone
 ##Pagado (CIDR/gz)
 #curl -L -A "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0" "http://list.iblocklist.com/?list=jdinualmqtpcrnptnqbq&fileformat=cidr&archiveformat=gz&username=netvoiss&pin=913915" | gunzip > /home/firewall/iblocklist.zone
 
@@ -63,9 +63,9 @@ iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 echo "Abrimos puertos de los servicios solo desde IPs del ipset \"permitidas\"..."
 #Acepto solo IPs del ipset "permitidas" para SSH TCP 10041
 iptables -t filter -A INPUT -m set --match-set permitidas src -m tcp -p tcp --dport 10041 -j ACCEPT
-#Acepto solo IPs del ipset "permitidas" para SIP en UDP 5060 en eth0
+#Acepto solo IPs del ipset "permitidas" para SIP en UDP 5060
 #iptables -t filter -A INPUT -m set --match-set permitidas src -m udp -p udp --dport 5060 -j ACCEPT
-#Acepto paquetes RTP de cualquir parte en UDP 10000:20000 en eth0
+#Acepto paquetes RTP de cualquir parte en UDP 10000:20000
 #iptables -t filter -A INPUT -m udp -p udp --dport 10000:20000 -j ACCEPT
 
 ##IPv6

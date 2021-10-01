@@ -1,14 +1,15 @@
 #!/bin/sh
+folder="/home/firewall"
 ###Descargar el archivo desde iblocklist
 echo "Descargando el archivo desde iblocklist..."
 ##Gratis (P2P/gz) Chile
-curl -L 'http://list.iblocklist.com/?list=cl&fileformat=p2p&archiveformat=gz' | gunzip | awk -F ':' '{print $2}' > /home/firewall/cl.zone
+curl -L 'http://list.iblocklist.com/?list=cl&fileformat=p2p&archiveformat=gz' | gunzip | awk -F ':' '{print $2}' > $folder/cl.zone
 ##Pagado (CIDR/gz)
-#curl -L -A "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0" "http://list.iblocklist.com/?list=jdinualmqtpcrnptnqbq&fileformat=cidr&archiveformat=gz&username=netvoiss&pin=913915" | gunzip > /home/firewall/iblocklist.zone
+#curl -L -A "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0" "http://list.iblocklist.com/?list=jdinualmqtpcrnptnqbq&fileformat=cidr&archiveformat=gz&username=netvoiss&pin=913915" | gunzip > $folder/iblocklist.zone
 
 ###Descargar el archivo desde google docs otras.zone
 #echo "Descargando el archivo otras.zone..."
-#curl -L "https://docs.google.com/feeds/download/documents/export/Export?id=18_Su7xlUx6IBkHx_pYFBNfvRLj9RJqYiil_iHdhku0g&exportFormat=txt" > /home/firewall/otras.zone
+#curl -L "https://docs.google.com/feeds/download/documents/export/Export?id=18_Su7xlUx6IBkHx_pYFBNfvRLj9RJqYiil_iHdhku0g&exportFormat=txt" > $folder/otras.zone
 
 ###IPSET by MAB
 echo "-----IPSET by MAB-----"
@@ -16,7 +17,7 @@ echo "Creando/Limpiando ipset \"permitidas\"..."
 ipset create permitidas hash:net -exist
 ipset flush permitidas
 echo "Agregando IPs permitidas al ipset \"permitidas\"..."
-for IP in $(cat $(pwd)/*.zone | grep -v \# | grep -v '^[[:space:]]*$' | grep -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sed $'s/\r//') ; do ipset -A permitidas $IP -exist ; done
+for IP in $(cat $folder/*.zone | grep -v \# | grep -v '^[[:space:]]*$' | grep -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sed $'s/\r//') ; do ipset -A permitidas $IP -exist ; done
 
 ###IPTables By MAB
 echo "-----IPTABLES by MAB-----"

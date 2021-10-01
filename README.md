@@ -10,9 +10,9 @@ Uso:
 6. systemctl start MAB-firewall
 7. crontab -e
 8. agragar:
-0 0 * * * sh /home/firewall/firewall.sh >/dev/null 2>&1
+*/30 * * * * sh /home/firewall/firewall-start.sh >/dev/null 2>&1
 
 firewall-stop.sh borrará todas las reglas y dejará iptables limpio. Puede ser utilizado en crond por si nos mandamos un "cagazo" en iptables y dejará todo limpio dentro de 0/5 (5 minutos)
 Es el "salvavidas" si estamos negando todas las conexiones (INPUT DROP) 
 
-*/5 0 * * * sh /home/firewall/stop.sh >/dev/null 2>&1
+*/5 0 * * * sh /home/firewall/firewall-stop.sh >/dev/null 2>&1

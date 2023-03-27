@@ -48,22 +48,22 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
 ##Aceptamos todo en LAN
-#echo "Aceptamos todo desde/hacia LAN..."
+#echo "Aceptamos todo desde/hacia LAN (ens265)..."
 #iptables -A INPUT -i ens265 -j ACCEPT
 #iptables -A OUTPUT -o ens256 -j ACCEPT
-
-##PING
-echo "Aceptamos ping reply..."
-iptables -t filter -A INPUT -p icmp --icmp-type echo-reply -m state --state ESTABLISHED,RELATED -j ACCEPT
-echo "Aceptamos PING solo desde IPs del ipset \"permitidas\"..."
-iptables -t filter -A INPUT -m set --match-set permitidas src -p icmp --icmp-type echo-request -j ACCEPT
 
 ##ESTABLISHED,RELATED
 echo "Aceptamos respuesta a las conexiones ya establecidas..."
 iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
+##PING reply
+echo "Aceptamos ping reply..."
+iptables -t filter -A INPUT -p icmp --icmp-type echo-reply -m state --state ESTABLISHED,RELATED -j ACCEPT
+
 ##Servicios filtrados por ipset
-echo "Abrimos puertos de los servicios solo desde IPs del ipset \"permitidas\"..."
+echo "Aceptamos PING desde IPs del ipset \"permitidas\"..."
+iptables -t filter -A INPUT -m set --match-set permitidas src -p icmp --icmp-type echo-request -j ACCEPT
+echo "Abrimos puertos de los servicios desde IPs del ipset \"permitidas\"..."
 #Acepto solo IPs del ipset "permitidas" para SSH TCP 10041
 iptables -t filter -A INPUT -m set --match-set permitidas src -m tcp -p tcp --dport 10041 -j ACCEPT
 #Acepto solo IPs del ipset "permitidas" para SIP en UDP 5060
@@ -71,12 +71,16 @@ iptables -t filter -A INPUT -m set --match-set permitidas src -m tcp -p tcp --dp
 #Acepto paquetes RTP de cualquir parte en UDP 10000:20000
 #iptables -t filter -A INPUT -m udp -p udp --dport 10000:20000 -j ACCEPT
 
+##Servicios filtrados por GeoIP
+#echo "Aceptamos PING desde paises por GeoIP"
+#iptables -t filter -A INPUT -m geoip --src-cc CL -p icmp --icmp-type echo-request -j ACCEPT
+#echo "Abrimos puertos desde paises por GeoIP"
+#iptables -t filter -A INPUT -m geoip --src-cc CL -m tcp -p tcp --dport 10041 -j ACCEPT
+
 ##Servicios abiertos a todas partes...
 #echo "Aceptamos PING de todas partes..."
 #iptables -t filter -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
-
 #echo "Abrimos puertos de los servicios para todas partes..."
-#Acepto conexiones para SSH TCP 10041 desde todas partes
 #iptables -t filter -A INPUT -m tcp -p tcp --dport 10041 -j ACCEPT
 
 

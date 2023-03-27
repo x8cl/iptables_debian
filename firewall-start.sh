@@ -58,9 +58,11 @@ iptables -t filter -A INPUT -p icmp --icmp-type echo-reply -m state --state ESTA
 echo "Aceptamos PING solo desde IPs del ipset \"permitidas\"..."
 iptables -t filter -A INPUT -m set --match-set permitidas src -p icmp --icmp-type echo-request -j ACCEPT
 
+##ESTABLISHED,RELATED
 echo "Aceptamos respuesta a las conexiones ya establecidas..."
 iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
+##Servicios filtrados por ipset
 echo "Abrimos puertos de los servicios solo desde IPs del ipset \"permitidas\"..."
 #Acepto solo IPs del ipset "permitidas" para SSH TCP 10041
 iptables -t filter -A INPUT -m set --match-set permitidas src -m tcp -p tcp --dport 10041 -j ACCEPT
@@ -68,6 +70,15 @@ iptables -t filter -A INPUT -m set --match-set permitidas src -m tcp -p tcp --dp
 #iptables -t filter -A INPUT -m set --match-set permitidas src -m udp -p udp --dport 5060 -j ACCEPT
 #Acepto paquetes RTP de cualquir parte en UDP 10000:20000
 #iptables -t filter -A INPUT -m udp -p udp --dport 10000:20000 -j ACCEPT
+
+##Servicios abiertos a todas partes...
+#echo "Aceptamos PING de todas partes..."
+#iptables -t filter -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+
+#echo "Abrimos puertos de los servicios para todas partes..."
+#Acepto conexiones para SSH TCP 10041 desde todas partes
+#iptables -t filter -A INPUT -m tcp -p tcp --dport 10041 -j ACCEPT
+
 
 ##IPv6
 echo "Limpiando Reglas de Firewall ipv6..."

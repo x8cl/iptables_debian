@@ -1,9 +1,9 @@
 #!/bin/sh
 folder="/home/firewall"
 ###Descargar el archivo desde iblocklist
-echo "Descargando el archivo desde iblocklist..."
+#echo "Descargando el archivo desde iblocklist..."
 ##Gratis (P2P/gz) Chile
-curl -L 'http://list.iblocklist.com/?list=cl&fileformat=p2p&archiveformat=gz' | gunzip | awk -F ':' '{print $2}' > $folder/cl.zone
+#curl -L 'http://list.iblocklist.com/?list=cl&fileformat=p2p&archiveformat=gz' | gunzip | awk -F ':' '{print $2}' > $folder/cl.zone
 ##Pagado (CIDR/gz)
 #curl -L -A "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0" "http://list.iblocklist.com/?list=jdinualmqtpcrnptnqbq&fileformat=cidr&archiveformat=gz&username=netvoiss&pin=913915" | gunzip > $folder/iblocklist.zone
 
@@ -72,10 +72,11 @@ iptables -t filter -A INPUT -m set --match-set permitidas src -m tcp -p tcp --dp
 #iptables -t filter -A INPUT -m udp -p udp --dport 10000:20000 -j ACCEPT
 
 ##Servicios filtrados por GeoIP
+geoip_permitidos="CL"
 #echo "Aceptamos PING desde paises por GeoIP"
-#iptables -t filter -A INPUT -m geoip --src-cc CL -p icmp --icmp-type echo-request -j ACCEPT
+#iptables -t filter -A INPUT -m geoip --src-cc $geoip_permitidos -p icmp --icmp-type echo-request -j ACCEPT
 #echo "Abrimos puertos desde paises por GeoIP"
-#iptables -t filter -A INPUT -m geoip --src-cc CL -m tcp -p tcp --dport 10041 -j ACCEPT
+#iptables -t filter -A INPUT -m geoip --src-cc $geoip_permitidos -m tcp -p tcp --dport 10041 -j ACCEPT
 
 ##Servicios abiertos a todas partes...
 #echo "Aceptamos PING de todas partes..."
